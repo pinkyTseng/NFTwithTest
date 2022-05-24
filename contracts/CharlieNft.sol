@@ -42,6 +42,7 @@ contract CharlieNft is ERC721Enumerable, Ownable {
         // }
 
         for (uint256 idx = 1; idx <=  count; idx++) {
+            // ownermap[msg.sender] += 1;
             _safeMint(msg.sender, soldCount+idx);
             ownermap[msg.sender] += 1;
         }
