@@ -1351,8 +1351,7 @@ contract CharlieNft is ERC721Enumerable, Ownable {
         require(totalCount - soldCount >= count, "not so many nfts");
         require(count <= eachMintMaxCount, "over eachMintMaxCount");
         require(ownermap[msg.sender] + count <= maxOwn, "over individual maxOwn");
-        // require(sellPrice * count == msg.value, "paid for price wrong");
-        require(sellPrice * count <= msg.value, "paid for price lower than needed");
+        require(sellPrice * count == msg.value, "paid for price wrong");
 
         // for (uint256 idx = soldCount; idx < soldCount + count; idx++) {
         //     _safeMint(msg.sender, idx);

@@ -60,6 +60,21 @@ describe("CharlieNft", function () {
       expect(result).to.equal(ethers.utils.parseEther('0.01'));
     });
 
+    it("other mint 3 nft", async function () {
+      let balanceInWeiOld = await provider.getBalance(charlieNft.address);      
+      await charlieNft.openSell();
+      
+      let user1Connrct = await charlieNft.connect(user1);
+      // await user1Connrct.mint(3, {value: ethers.utils.parseEther('0.03')} );
+      await expect(user1Connrct.mint(3, {value: ethers.utils.parseEther('0.03')} )) .to.be.reverted;
+      //expect(await charlieNft.isSellActive()).to.equal(true);
+      
+    });
+
+
+
+
+
     it("tokenURI test", async function () {      
       await charlieNft.openSell();
       await charlieNft.mint(1, {value: ethers.utils.parseEther('0.01')} );

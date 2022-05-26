@@ -6,7 +6,7 @@ from manticore.core.smtlib import Operators, solver
 ETHER = 10**18
 
 m = ManticoreEVM()
-with open('my_token.sol') as f:
+with open('CharlieNftFlattern.sol') as f:
     source_code = f.read()
 
 # Create one user account
@@ -14,30 +14,17 @@ with open('my_token.sol') as f:
 user_account = m.create_account(balance=1000*ETHER)
 
 # contract_account = m.solidity_create_contract(source_code, owner=user_account, balance=0)
-contract_account = m.solidity_create_contract(source_code, owner=user_account, contract_name="Token", balance=0)
-
+contract_account = m.solidity_create_contract(source_code, owner=user_account, contract_name="CharlieNft", balance=0, args=("charlieNFT", "CFT"))
+contract_account.openSell()
 
 ###### Exploration ######
 
-# - Call balances[user]
-# - Call transfer with symbolic values
-# - Call balances[user]
-# Later we will compare the result of the first call to balances to the second
-contract_account.balances(user_account)
-
+# t2
+contract_account.balanceOf(user_account) 
+# symbolic_val = m.make_symbolic_value(4)
 symbolic_val = m.make_symbolic_value()
-symbolic_to = m.make_symbolic_value()
-# Transfer is called with symbolic values
-# Manticore will fork and create state at each condition executed
-contract_account.transfer(symbolic_to, symbolic_val)
-
-
-# contract_account.transfer(symbolic_to, symbolic_val)
-# contract_account.transfer(symbolic_to, symbolic_val)
-
-
-
-contract_account.balances(user_account)
+contract_account.mint(symbolic_val)
+contract_account.balanceOf(user_account)
 
 # Check of properties ######
 
@@ -50,13 +37,12 @@ for state in m.ready_states:
     # state.plateform.transactions[1] is the first transaction
     # state.plateform.transactions[-1] is the last transaction
 
-    balance_before = state.platform.transactions[1].return_data
-    balance_before = ABI.deserialize("uint", balance_before)
+    balance_before = state.platform.transactions[2].return_data
+    balance_before = ABI.deserialize("uint256", balance_before)
 
     balance_after = state.platform.transactions[-1].return_data
-    balance_after = ABI.deserialize("uint", balance_after)
+    balance_after = ABI.deserialize("uint256", balance_after)
 
-    print("!!!!now length is "+ str(len(state.platform.transactions)))
 
     # Check if it is possible to have balance_after > balance_before
     condition = Operators.UGT(balance_after, balance_before)

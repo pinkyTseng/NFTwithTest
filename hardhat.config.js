@@ -11,6 +11,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
+// npx hardhat flat contracts/CharlieNft.sol > CharlieNftFlattern.sol
 task("flat", "Flattens and prints contracts and their dependencies (Resolves licenses)")
   .addOptionalVariadicPositionalParam("files", "The files to flatten", undefined, types.inputFile)
   .setAction(async ({ files }, hre) => {
